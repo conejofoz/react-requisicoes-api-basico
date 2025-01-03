@@ -81,6 +81,22 @@ const Page = ()=>{
     console.log(res.data)
   }
 
+  const handleAddNewPostAxios = async ()=>{
+     const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+      userId: 98,
+      title: 'Título muito louco',
+      body: 'Corpo do título muito louco'
+     })
+
+     console.log(response)
+
+     if(response?.data?.id){
+      console.log('Inseriu com sucesso!')
+     } else {
+      console.log('Não foi possível inserir!')
+     }
+  }
+
   useEffect(()=>{
     getUsers(); //segundo o professor useEffect não aceita async
   }, []);
@@ -139,6 +155,7 @@ const Page = ()=>{
       <div className="mt-5 p-5 border">
         <h1 className="text-3xl">Requisição com axios</h1>
         <button onClick={handleGetPosts}>Pegar posts</button>
+        <button onClick={handleAddNewPostAxios}>Adicionar novo post com axios</button>
       </div>
     </div>
   )
