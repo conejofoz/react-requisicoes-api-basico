@@ -19,6 +19,23 @@ const Page = ()=>{
     setLoading(false);
   }
 
+  const handleAddNewPost = async()=>{
+    const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      headers:{
+        'Content-type': 'application/json; charset=UTF-8'
+      },
+      body: JSON.stringify({
+        title: 'Post de teste',
+        body: 'Corpo do post de teste',
+        userId: 99
+      })
+    });
+
+    const json = await res.json();
+    console.log(json);
+  }
+
   useEffect(()=>{
     getUsers(); //segundo o professor useEffect não aceita async
   }, []);
@@ -39,6 +56,7 @@ const Page = ()=>{
 
   return (
     <div className="container mx-auto">
+      <button onClick={handleAddNewPost}>Adicionar novo post</button>
       <h1 className="text-3xl">Lista de usuários</h1>
       {loading && "Carregando..."}
       {!loading && users.length > 0 &&
