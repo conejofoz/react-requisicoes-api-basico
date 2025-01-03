@@ -1,11 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { User } from "../types/User";
 
 const Page = ()=>{
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<User[]>([]);
+  const [legendInput, setLegendInput] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getUsers = async ()=>{
     setLoading(true);
@@ -34,6 +36,39 @@ const Page = ()=>{
 
     const json = await res.json();
     console.log(json);
+  }
+
+  const handleFileSend = async()=>{
+    if(fileInputRef.current?.files && fileInputRef.current.files.length > 0){
+      const fileItem = fileInputRef.current.files[0];
+      const allowed = ['image/jpg', 'image/jpeg', 'image/png']
+      console.log(fileItem)
+      
+      if(allowed.includes(fileItem.type)){
+
+        const data = new FormData();
+        data.append('image', fileItem);
+        data.append('legend', legendInput);
+
+        const res = await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST', 
+          headers: {
+            'Content-type': 'multipart/form-data'
+          }, 
+          body: data
+        })
+
+        const json = await res.json();
+        console.log(json);
+
+      } else {
+        alert('Arquivo inválido!')
+      }
+
+      
+    } else {
+      alert('Selecione um arquivo!')
+    }
   }
 
   useEffect(()=>{
@@ -69,6 +104,27 @@ const Page = ()=>{
         </ul>
       }
       {!loading && users.length === 0 && "Não há usuários para exibir."}
+
+
+      <div className="flex flex-col gap-3 max-w-md border border-dotted border-white p-3 mt-4">
+        <h1 className="text-3xl mt-4">Upload de Imagem</h1>
+        
+        <input 
+          type="file" 
+          ref={fileInputRef} 
+        />
+
+        <input 
+          type="text" 
+          placeholder="Digite uma legenda"
+          className="p-3 bg-white rounded-md text-black"
+          value={legendInput}
+          onChange={e => setLegendInput(e.target.value)}
+        />
+
+        <button onClick={handleFileSend}>Enviar imagem</button>
+
+      </div>
     </div>
   )
 }
