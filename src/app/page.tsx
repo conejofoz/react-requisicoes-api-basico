@@ -1,4 +1,5 @@
 "use client"
+import axios from 'axios';
 
 import { useEffect, useRef, useState } from "react";
 import { User } from "../types/User";
@@ -71,6 +72,15 @@ const Page = ()=>{
     }
   }
 
+  const handleGetPosts = async()=>{
+    const res = await axios.get('https://jsonplaceholder.typicode.com/comments', {
+      params: {
+        postId: 1
+      }
+    });
+    console.log(res.data)
+  }
+
   useEffect(()=>{
     getUsers(); //segundo o professor useEffect não aceita async
   }, []);
@@ -124,6 +134,11 @@ const Page = ()=>{
 
         <button onClick={handleFileSend}>Enviar imagem</button>
 
+      </div>
+
+      <div className="mt-5 p-5 border">
+        <h1 className="text-3xl">Requisição com axios</h1>
+        <button onClick={handleGetPosts}>Pegar posts</button>
       </div>
     </div>
   )
