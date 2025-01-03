@@ -1,5 +1,6 @@
 "use client"
-import axios from 'axios';
+//import axios from 'axios';
+import { api } from "@/config/api"
 
 import { useEffect, useRef, useState } from "react";
 import { User } from "../types/User";
@@ -73,7 +74,8 @@ const Page = ()=>{
   }
 
   const handleGetPosts = async()=>{
-    const res = await axios.get('https://jsonplaceholder.typicode.com/comments', {
+    //const res = await axios.get('https://jsonplaceholder.typicode.com/comments', {
+    const res = await api.get('/posts', {
       params: {
         postId: 1
       }
@@ -82,7 +84,7 @@ const Page = ()=>{
   }
 
   const handleAddNewPostAxios = async ()=>{
-     const response = await axios.post('https://jsonplaceholder.typicode.com/posts', {
+     const response = await api.post('/posts', {
       userId: 98,
       title: 'Título muito louco',
       body: 'Corpo do título muito louco'
